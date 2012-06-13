@@ -3119,6 +3119,20 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
+        
+        /**
+         * Determine friction of scrolling
+         *
+         * @hide
+         */
+        public static final String SCROLL_FRICTION = "scroll_friction";
+
+        /**
+         * Determine custom fling velocity
+         *
+         * @hide
+         */
+        public static final String CUSTOM_FLING_VELOCITY = "custom_fling_velocity";
     }
 
     /**
