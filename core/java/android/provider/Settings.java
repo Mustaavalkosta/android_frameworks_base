@@ -3128,11 +3128,11 @@ public final class Settings {
         public static final String SCROLL_FRICTION = "scroll_friction";
 
         /**
-         * Determine custom fling velocity
+         * Determine fling velocity
          *
          * @hide
          */
-        public static final String CUSTOM_FLING_VELOCITY = "custom_fling_velocity";
+        public static final String FLING_VELOCITY = "fling_velocity";
     }
 
     /**

@@ -280,7 +280,7 @@ public class ViewConfiguration {
      */
     private ViewConfiguration(Context context) {
         SCROLL_FRICTION = Settings.System.getFloat(context.getContentResolver(), Settings.System.SCROLL_FRICTION, 0.014f);
-        MAXIMUM_FLING_VELOCITY = Settings.System.getInt(context.getContentResolver(), Settings.System.CUSTOM_FLING_VELOCITY, 8000);
+        MAXIMUM_FLING_VELOCITY = Settings.System.getInt(context.getContentResolver(), Settings.System.FLING_VELOCITY, 8000);
         final Resources res = context.getResources();
         final DisplayMetrics metrics = res.getDisplayMetrics();
         final Configuration config = res.getConfiguration();
