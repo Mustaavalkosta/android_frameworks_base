@@ -154,6 +154,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import static android.provider.Settings.System.FORCE_TABLET_UI;
+
 /** {@hide} */
 public class WindowManagerService extends IWindowManager.Stub
         implements Watchdog.Monitor, WindowManagerPolicy.WindowManagerFuncs {
@@ -6430,7 +6432,13 @@ public class WindowManagerService extends IWindowManager.Stub
         sl = reduceConfigLayout(sl, Surface.ROTATION_90, density, unrotDh, unrotDw);
         sl = reduceConfigLayout(sl, Surface.ROTATION_180, density, unrotDw, unrotDh);
         sl = reduceConfigLayout(sl, Surface.ROTATION_270, density, unrotDh, unrotDw);
-        outConfig.smallestScreenWidthDp = (int)(mSmallestDisplayWidth / density);
+        // TabletUI Switch
+        boolean mTabletui = Settings.System.getInt(mContext.getContentResolver(), FORCE_TABLET_UI, 0) != 0;
+        if (!mTabletui) {
+        	outConfig.smallestScreenWidthDp = (int)(mSmallestDisplayWidth / density);
+        } else {
+        	outConfig.smallestScreenWidthDp = 721;
+        }
         outConfig.screenLayout = sl;
     }
 

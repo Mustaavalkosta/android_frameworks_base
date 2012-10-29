@@ -2597,12 +2597,6 @@ public final class Settings {
         public static final String QUIET_HOURS_DIM = "quiet_hours_dim";
 
         /**
-         * Statusbar toggle for 6 bar signal strength.
-         * @hide
-         */
-        public static final String STATUSBAR_6BAR_SIGNAL = "statusbar_6bar_signal";
-
-        /**
          * Sets the lockscreen background style
          * @hide
          */
@@ -3147,6 +3141,18 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
+        
+        /**
+         * Statusbar toggle for 6 bar signal strength.
+         * @hide
+         */
+        public static final String STATUSBAR_6BAR_SIGNAL = "statusbar_6bar_signal";
+        
+        /**
+         * User interface mode. This is used to change the UI mode forcing it to
+         * Change into tablet mode. Default is disabled. 
+         */
+        public static final String FORCE_TABLET_UI = "force_tabletui";
         
         /**
          * Determine friction of scrolling

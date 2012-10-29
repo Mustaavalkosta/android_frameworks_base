@@ -165,6 +165,8 @@ import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
+import static android.provider.Settings.System.FORCE_TABLET_UI;
+
 /**
  * WindowManagerPolicy implementation for the Android phone UI.  This
  * introduces a new method suffix, Lp, for an internal lock of the
@@ -1328,19 +1330,26 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         int shortSizeDp = shortSize
                 * DisplayMetrics.DENSITY_DEFAULT
                 / DisplayMetrics.DENSITY_DEVICE;
-
-        if (shortSizeDp < 600) {
-            // 0-599dp: "phone" UI with a separate status & navigation bar
-            mHasSystemNavBar = false;
-            mNavigationBarCanMove = true;
-        } else if (shortSizeDp < 720) {
-            // 600-719dp: "phone" UI with modifications for larger screens
-            mHasSystemNavBar = false;
-            mNavigationBarCanMove = false;
+        
+        // TabletUI Switch
+        boolean mTabletui = Settings.System.getInt(mContext.getContentResolver(), FORCE_TABLET_UI, 0) != 0;
+        if (!mTabletui) {	
+	        if (shortSizeDp < 600) {
+	            // 0-599dp: "phone" UI with a separate status & navigation bar
+	            mHasSystemNavBar = false;
+	            mNavigationBarCanMove = true;
+	        } else if (shortSizeDp < 720) {
+	            // 600-719dp: "phone" UI with modifications for larger screens
+	            mHasSystemNavBar = false;
+	            mNavigationBarCanMove = false;
+	        } else {
+	            // 720dp: "tablet" UI with a single combined status & navigation bar
+	            mHasSystemNavBar = true;
+	            mNavigationBarCanMove = false;
+	        }
         } else {
-            // 720dp: "tablet" UI with a single combined status & navigation bar
-            mHasSystemNavBar = true;
-            mNavigationBarCanMove = false;
+        	mHasSystemNavBar = true;
+        	mNavigationBarCanMove = false;
         }
 
         if (!mHasSystemNavBar) {
