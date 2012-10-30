@@ -3143,7 +3143,7 @@ public final class Settings {
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
         
         /**
-         * Statusbar toggle for 6 bar signal strength.
+         * Statusbar toggle for 6 bar wifi and telephony signal strength. Default is disabled.
          * @hide
          */
         public static final String STATUSBAR_6BAR_SIGNAL = "statusbar_6bar_signal";

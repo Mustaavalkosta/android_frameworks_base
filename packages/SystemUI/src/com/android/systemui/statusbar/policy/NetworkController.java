@@ -479,10 +479,8 @@ public class NetworkController extends BroadcastReceiver {
     }
 
     private final void updateTelephonySignalStrength() {
-
         boolean useSixBar = (Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.STATUSBAR_6BAR_SIGNAL, 0) == 1);
-
         if (!hasService()) {
             if (CHATTY) Slog.d(TAG, "updateTelephonySignalStrength: !hasService()");
 
@@ -823,15 +821,25 @@ public class NetworkController extends BroadcastReceiver {
     }
 
     private void updateWifiIcons() {
+    	boolean useSixBar = (Settings.System.getInt(mContext.getContentResolver(),
+    			Settings.System.STATUSBAR_6BAR_SIGNAL, 0) == 1);
         if (mWifiConnected) {
-            mWifiIconId = WifiIcons.WIFI_SIGNAL_STRENGTH[mInetCondition][mWifiLevel];
+        	if (useSixBar) {
+        		mWifiIconId = WifiIcons.WIFI_SIGNAL_STRENGTH_6BAR[mInetCondition][mWifiLevel];
+        	} else {
+        		mWifiIconId = WifiIcons.WIFI_SIGNAL_STRENGTH[mInetCondition][mWifiLevel];
+        	}
             mContentDescriptionWifi = mContext.getString(
                     AccessibilityContentDescriptions.WIFI_CONNECTION_STRENGTH[mWifiLevel]);
         } else {
             if (mDataAndWifiStacked) {
                 mWifiIconId = 0;
             } else {
-                mWifiIconId = mWifiEnabled ? R.drawable.stat_sys_wifi_signal_null : 0;
+            	if (useSixBar) {
+            		mWifiIconId = mWifiEnabled ? R.drawable.stat_sys_wifi_signal_null_6bar : 0;
+            	} else {
+            		mWifiIconId = mWifiEnabled ? R.drawable.stat_sys_wifi_signal_null : 0;
+            	}
             }
             mContentDescriptionWifi = mContext.getString(R.string.accessibility_no_wifi);
         }
