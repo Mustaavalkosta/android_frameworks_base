@@ -3149,6 +3149,12 @@ public final class Settings {
         public static final String STATUSBAR_6BAR_SIGNAL = "statusbar_6bar_signal";
         
         /**
+         * Whether to use multipane settings opposed to single pane. Default is disabled.
+         * @hide
+         */
+        public static final String DUAL_PANE_SETTINGS = "dual_pane_settings";
+        
+        /**
          * User interface mode. This is used to change the UI mode forcing it to
          * Change into tablet mode. Default is disabled. 
          */
