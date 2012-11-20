@@ -50,4 +50,5 @@ class WifiIcons {
     	};
 
     static final int WIFI_LEVEL_COUNT = WIFI_SIGNAL_STRENGTH[0].length;
+    static final int WIFI_LEVEL_COUNT_SIXBAR = WIFI_SIGNAL_STRENGTH_6BAR[0].length;
 }

@@ -786,6 +786,8 @@ public class NetworkController extends BroadcastReceiver {
     }
 
     private void updateWifiState(Intent intent) {
+        boolean useSixBar = (Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.STATUSBAR_6BAR_SIGNAL, 0) == 1);
         final String action = intent.getAction();
         if (action.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
             mWifiEnabled = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
@@ -813,8 +815,13 @@ public class NetworkController extends BroadcastReceiver {
             }
         } else if (action.equals(WifiManager.RSSI_CHANGED_ACTION)) {
             mWifiRssi = intent.getIntExtra(WifiManager.EXTRA_NEW_RSSI, -200);
-            mWifiLevel = WifiManager.calculateSignalLevel(
-                    mWifiRssi, WifiIcons.WIFI_LEVEL_COUNT);
+            if (useSixBar) {
+                mWifiLevel = WifiManager.calculateSignalLevel(
+                        mWifiRssi, WifiIcons.WIFI_LEVEL_COUNT_SIXBAR);
+            } else {
+                mWifiLevel = WifiManager.calculateSignalLevel(
+                        mWifiRssi, WifiIcons.WIFI_LEVEL_COUNT);
+            }
         }
 
         updateWifiIcons();
