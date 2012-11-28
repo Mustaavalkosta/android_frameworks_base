@@ -3239,11 +3239,18 @@ public final class Settings {
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
         
+        /** PIZZABEAN STARTS */
         /**
          * Statusbar toggle for 6 bar wifi and telephony signal strength. Default is disabled.
          * @hide
          */
         public static final String STATUSBAR_6BAR_SIGNAL = "statusbar_6bar_signal";
+
+        /**
+         * Recent apps memory usage display.
+         * @hide
+         */
+        public static final String RECENTS_MEM_DISPLAY = "recents_mem_display";
         
         /**
          * Whether to use multipane settings opposed to single pane. Default is disabled.
@@ -3270,6 +3277,7 @@ public final class Settings {
          * @hide
          */
         public static final String FLING_VELOCITY = "fling_velocity";
+        /** PIZZABEAN ENDS */
     }
 
     /**

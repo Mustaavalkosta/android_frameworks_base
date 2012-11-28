@@ -19,6 +19,7 @@ package com.android.systemui.recent;
 import android.animation.Animator;
 import android.animation.LayoutTransition;
 import android.app.ActivityManager;
+import android.app.ActivityManager.MemoryInfo;
 import android.app.ActivityManagerNative;
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -33,6 +34,7 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.provider.Settings;
@@ -56,14 +58,17 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.internal.util.MemInfoReader;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
 import com.android.systemui.statusbar.tablet.StatusBarPanel;
 import com.android.systemui.statusbar.tablet.TabletStatusBar;
+import com.android.systemui.recent.RecentsVerticalScrollView;
 
 import java.util.ArrayList;
 
@@ -102,6 +107,11 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private int mRecentItemLayoutId;
     private boolean mFirstScreenful = true;
     private boolean mHighEndGfx;
+
+    private MemInfoReader mMemInfoReader = new MemInfoReader();
+    private TextView mMemoryUsedText;
+    private TextView mMemoryAvailText;
+    private ProgressBar mMemoryBar;
 
     public static interface OnRecentsPanelVisibilityChangedListener {
         public void onRecentsPanelVisibilityChanged(boolean visible);
@@ -284,6 +294,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             mWaitingToShow = true;
             mWaitingToShowAnimated = animate;
             showIfReady();
+            showMemDisplay();
         } else {
             show(show, animate, null, false);
         }
@@ -858,6 +869,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
             setContentDescription(null);
         }
+        updateMemDisplay();
     }
 
     private void startApplicationDetailsActivity(String packageName) {
@@ -909,4 +921,56 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         });
         popup.show();
     }
+
+    private boolean showMemDisplay() {
+        boolean mMemoryDisplay = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.RECENTS_MEM_DISPLAY, 0) != 0;
+
+        mMemoryUsedText = (TextView) findViewById(R.id.recents_memory_used_text);
+        mMemoryAvailText = (TextView) findViewById(R.id.recents_memory_avail_text);
+        mMemoryBar = (ProgressBar) findViewById(R.id.recents_memory_bar);
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.recents_header_layout);
+        RecentsVerticalScrollView scrollView = (RecentsVerticalScrollView) findViewById(R.id.recents_container);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(scrollView.getLayoutParams());
+
+        if (!mMemoryDisplay) {
+            mMemoryUsedText.setVisibility(View.GONE);
+            mMemoryAvailText.setVisibility(View.GONE);
+            mMemoryBar.setVisibility(View.GONE);
+            frameLayout.setVisibility(View.GONE);
+            params.topMargin = 0;
+            scrollView.setLayoutParams(params);
+            return false;
+        }
+
+        mMemoryUsedText.setVisibility(View.VISIBLE);
+        mMemoryAvailText.setVisibility(View.VISIBLE);
+        mMemoryBar.setVisibility(View.VISIBLE);
+        frameLayout.setVisibility(View.VISIBLE);
+        params.topMargin = (int)(32 * this.getContext().getResources().getDisplayMetrics().density);
+        scrollView.setLayoutParams(params);
+
+        this.updateMemDisplay();
+
+        return true;
+    }
+
+    void updateMemDisplay() {
+        mMemInfoReader.readMemInfo();
+        ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
+        
+        int availMem = (int)((mMemInfoReader.getFreeSize() + mMemInfoReader.getCachedSize()
+            - memInfo.secondaryServerThreshold) / 1048576); // = 1024*1024
+        if (availMem < 0) {
+            availMem = 0;
+        }
+
+        int totalMem = (int)(mMemInfoReader.getTotalSize() / 1048576); // = 1024*1024;
+        int usedMem = totalMem - availMem;
+        mMemoryBar.setMax(totalMem);
+        mMemoryUsedText.setText("Used: " + usedMem + "MB");
+        mMemoryAvailText.setText("Free: " + availMem + "MB");
+        mMemoryBar.setProgress(usedMem);
+    }    
+
 }
