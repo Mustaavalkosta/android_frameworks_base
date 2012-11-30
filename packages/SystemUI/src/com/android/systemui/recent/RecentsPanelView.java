@@ -34,7 +34,6 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Handler;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.provider.Settings;
@@ -68,7 +67,6 @@ import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
 import com.android.systemui.statusbar.tablet.StatusBarPanel;
 import com.android.systemui.statusbar.tablet.TabletStatusBar;
-import com.android.systemui.recent.RecentsVerticalScrollView;
 
 import java.util.ArrayList;
 
@@ -930,7 +928,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         mMemoryAvailText = (TextView) findViewById(R.id.recents_memory_avail_text);
         mMemoryBar = (ProgressBar) findViewById(R.id.recents_memory_bar);
         FrameLayout frameLayout = (FrameLayout) findViewById(R.id.recents_header_layout);
-        RecentsVerticalScrollView scrollView = (RecentsVerticalScrollView) findViewById(R.id.recents_container);
+        ViewGroup scrollView = (ViewGroup) findViewById(R.id.recents_container);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(scrollView.getLayoutParams());
 
         if (!mMemoryDisplay) {
