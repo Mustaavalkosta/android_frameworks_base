@@ -292,7 +292,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             mWaitingToShow = true;
             mWaitingToShowAnimated = animate;
             showIfReady();
-            showMemDisplay();
         } else {
             show(show, animate, null, false);
         }
@@ -349,6 +348,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                     return;
                 }
             }
+            showMemDisplay();
         } else {
             // Need to set recent tasks to dirty so that next time we load, we
             // refresh the list of tasks
@@ -968,6 +968,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         mMemoryUsedText.setText("Used: " + usedMem + "MB");
         mMemoryAvailText.setText("Free: " + availMem + "MB");
         mMemoryBar.setProgress(usedMem);
-    }    
+    }
 
 }
