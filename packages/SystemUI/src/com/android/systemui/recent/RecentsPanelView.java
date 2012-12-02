@@ -929,7 +929,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         mMemoryBar = (ProgressBar) findViewById(R.id.recents_memory_bar);
         FrameLayout frameLayout = (FrameLayout) findViewById(R.id.recents_header_layout);
         ViewGroup scrollView = (ViewGroup) findViewById(R.id.recents_container);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(scrollView.getLayoutParams());
+        ViewGroup.MarginLayoutParams params = (MarginLayoutParams) scrollView.getLayoutParams();
 
         if (!mMemoryDisplay) {
             mMemoryUsedText.setVisibility(View.GONE);
@@ -947,7 +947,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         frameLayout.setVisibility(View.VISIBLE);
         params.topMargin = (int)(32 * this.getContext().getResources().getDisplayMetrics().density);
         scrollView.setLayoutParams(params);
-
         this.updateMemDisplay();
 
         return true;
