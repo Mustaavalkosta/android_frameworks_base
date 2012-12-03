@@ -3241,6 +3241,12 @@ public final class Settings {
         
         /** PIZZABEAN STARTS */
         /**
+         * Hardware button backlight timeout. Default is 6 seconds.
+         * @hide
+         */
+        public static final String KEYLIGHT_TIMEOUT = "keylight_timeout";
+
+        /**
          * Statusbar toggle for 6 bar wifi and telephony signal strength. Default is disabled.
          * @hide
          */
@@ -3260,7 +3266,8 @@ public final class Settings {
         
         /**
          * User interface mode. This is used to change the UI mode forcing it to
-         * Change into tablet mode. Default is disabled. 
+         * Change into tablet mode. Default is disabled.
+         * @hide
          */
         public static final String FORCE_TABLET_UI = "force_tabletui";
         

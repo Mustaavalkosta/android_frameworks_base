@@ -62,6 +62,7 @@ import android.util.Slog;
 import android.view.WindowManagerPolicy;
 import static android.view.WindowManagerPolicy.OFF_BECAUSE_OF_PROX_SENSOR;
 import static android.provider.Settings.System.DIM_SCREEN;
+import static android.provider.Settings.System.KEYLIGHT_TIMEOUT;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE;
 import static android.provider.Settings.System.SCREEN_AUTO_BRIGHTNESS_ADJ;
@@ -551,6 +552,9 @@ public class PowerManagerService extends IPowerManager.Stub
 
                 // SCREEN_OFF_TIMEOUT, default to 15 seconds
                 mScreenOffTimeoutSetting = getInt(SCREEN_OFF_TIMEOUT, DEFAULT_SCREEN_OFF_TIMEOUT);
+
+                // KEYLIGHT_TIMEOUT, default to 6 seconds
+                mKeylightDelay = getInt(KEYLIGHT_TIMEOUT, LONG_KEYLIGHT_DELAY);
 
                 // DIM_SCREEN
                 //mDimScreen = getInt(DIM_SCREEN) != 0;
@@ -3363,7 +3367,8 @@ public class PowerManagerService extends IPowerManager.Stub
             if (totalDelay > mMaximumScreenOffTimeout) {
                 totalDelay = mMaximumScreenOffTimeout;
             }
-            mKeylightDelay = LONG_KEYLIGHT_DELAY;
+            mKeylightDelay = Settings.System.getInt(mContext.getContentResolver(),
+                    KEYLIGHT_TIMEOUT, LONG_KEYLIGHT_DELAY);
             if (totalDelay < 0) {
                 // negative number means stay on as long as possible.
                 mScreenOffDelay = mMaximumScreenOffTimeout;
@@ -3373,9 +3378,10 @@ public class PowerManagerService extends IPowerManager.Stub
                 // screen off timeout.
                 mScreenOffDelay = totalDelay - mKeylightDelay;
             } else {
+                mKeylightDelay = totalDelay;
                 mScreenOffDelay = 0;
             }
-            if (mDimScreen && totalDelay >= (LONG_KEYLIGHT_DELAY + LONG_DIM_TIME)) {
+            if (mDimScreen && totalDelay >= (mKeylightDelay + LONG_DIM_TIME)) {
                 mDimDelay = mScreenOffDelay - LONG_DIM_TIME;
                 mScreenOffDelay = LONG_DIM_TIME;
             } else {
