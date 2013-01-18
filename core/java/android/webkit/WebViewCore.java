@@ -1,4 +1,8 @@
 /*
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ * Not a Contribution. Apache license notifications and license are retained
+ * for attribution purposes only.
+ *
  * Copyright (C) 2007 The Android Open Source Project
  * Copyright (C) 2012-2013 Sony Mobile Communications AB.
  *
@@ -326,6 +330,11 @@ public final class WebViewCore {
             || MediaFile.isPlayListFileType(fileType)
             // The following is not in Media framework, but it's supported.
             || (mimeType != null && mimeType.startsWith("video/m4v"));
+    }
+
+    /* package */ static boolean isPlayListMimeType(String mimeType) {
+        int fileType = MediaFile.getFileTypeForMimeType(mimeType);
+        return MediaFile.isPlayListFileType(fileType);
     }
 
     /**
