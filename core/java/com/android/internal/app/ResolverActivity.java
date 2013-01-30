@@ -44,10 +44,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -71,8 +71,8 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
     private boolean mAlwaysUseOption;
     private boolean mShowExtended;
     private GridView mGrid;
-    private Button mAlwaysButton;
-    private Button mOnceButton;
+    private RadioButton mAlwaysButton;
+    private RadioButton mOnceButton;
     private int mIconDpi;
     private int mIconSize;
     private int mMaxColumns;
@@ -165,8 +165,8 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
             final ViewGroup buttonLayout = (ViewGroup) findViewById(R.id.button_bar);
             if (buttonLayout != null) {
                 buttonLayout.setVisibility(View.VISIBLE);
-                mAlwaysButton = (Button) buttonLayout.findViewById(R.id.button_always);
-                mOnceButton = (Button) buttonLayout.findViewById(R.id.button_once);
+                mAlwaysButton = (RadioButton) buttonLayout.findViewById(R.id.button_always);
+                mOnceButton = (RadioButton) buttonLayout.findViewById(R.id.button_once);
             } else {
                 mAlwaysUseOption = false;
             }
@@ -265,18 +265,12 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
             mAlwaysButton.setEnabled(hasValidSelection);
             mOnceButton.setEnabled(hasValidSelection);
             if (hasValidSelection) {
-                mGrid.smoothScrollToPosition(checkedPos);
+                startSelected(position, mAlwaysButton.isChecked());
             }
             mLastSelected = checkedPos;
         } else {
-            startSelected(position, false);
+            startSelected(position, mAlwaysButton.isChecked());
         }
-    }
-
-    public void onButtonClick(View v) {
-        final int id = v.getId();
-        startSelected(mGrid.getCheckedItemPosition(), id == R.id.button_always);
-        dismiss();
     }
 
     void startSelected(int which, boolean always) {
