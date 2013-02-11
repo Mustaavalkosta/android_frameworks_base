@@ -35,7 +35,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PatternMatcher;
-import android.os.Process;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.util.Log;
@@ -249,8 +248,6 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
             final int checkedPos = mGrid.getCheckedItemPosition();
             final boolean enabled = checkedPos != GridView.INVALID_POSITION;
             mLastSelected = checkedPos;
-            mAlwaysButton.setEnabled(enabled);
-            mOnceButton.setEnabled(enabled);
             if (enabled) {
                 mGrid.setSelection(checkedPos);
             }
@@ -262,14 +259,12 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
         final int checkedPos = mGrid.getCheckedItemPosition();
         final boolean hasValidSelection = checkedPos != GridView.INVALID_POSITION;
         if (mAlwaysUseOption && (!hasValidSelection || mLastSelected != checkedPos)) {
-            mAlwaysButton.setEnabled(hasValidSelection);
-            mOnceButton.setEnabled(hasValidSelection);
             if (hasValidSelection) {
                 startSelected(position, mAlwaysButton.isChecked());
             }
             mLastSelected = checkedPos;
         } else {
-            startSelected(position, mAlwaysButton.isChecked());
+            startSelected(position, false);
         }
     }
 
