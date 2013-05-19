@@ -327,7 +327,7 @@ public class StorageNotification extends StorageEventListener {
             final boolean adbOn = 1 == Settings.Global.getInt(
                 mContext.getContentResolver(),
                 Settings.Global.ADB_ENABLED,
-                0);
+                1);
 
             if (POP_UMS_ACTIVITY_ON_CONNECT && !adbOn) {
                 // Pop up a full-screen alert to coach the user through enabling UMS. The average
