@@ -151,12 +151,14 @@ LOCAL_SRC_FILES:= \
 	android_content_res_ObbScanner.cpp \
 	android_content_res_Configuration.cpp \
     android_animation_PropertyValuesHolder.cpp
+ifeq ($(call is-vendor-board-platform,QCOM),true)
+LOCAL_SRC_FILES += org_codeaurora_Performance.cpp
+endif
 
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
     LOCAL_CFLAGS += -DQCOM_HARDWARE
     LOCAL_SRC_FILES += \
-		com_android_internal_app_ActivityTrigger.cpp \
-		org_codeaurora_Performance.cpp
+	    com_android_internal_app_ActivityTrigger.cpp
 endif
 
 LOCAL_C_INCLUDES += \
