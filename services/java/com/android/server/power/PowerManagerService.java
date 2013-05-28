@@ -67,8 +67,6 @@ import java.util.ArrayList;
 
 import libcore.util.Objects;
 
-import static android.provider.Settings.System.BUTTON_BACKLIGHT_TIMEOUT;
-
 /**
  * The power manager service is responsible for coordinating power management
  * functions on the device.
@@ -191,7 +189,6 @@ public final class PowerManagerService extends IPowerManager.Stub
     private LightsService.Light mKeyboardLight;
     private LightsService.Light mCapsLight;
     private LightsService.Light mFnLight;
-    private int mButtonBacklightDelay;
 
     private final Object mLock = new Object();
 
@@ -512,9 +509,6 @@ public final class PowerManagerService extends IPowerManager.Stub
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SCREEN_BRIGHTNESS_MODE),
                     false, mSettingsObserver, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.BUTTON_BACKLIGHT_TIMEOUT),
-                    false, mSettingsObserver, UserHandle.USER_ALL);
 
             // Go.
             readConfigurationLocked();
@@ -585,9 +579,6 @@ public final class PowerManagerService extends IPowerManager.Stub
         if (oldScreenBrightnessModeSetting != mScreenBrightnessModeSetting) {
             mAutoBrightnessHandler.onAutoBrightnessChanged(mScreenBrightnessModeSetting);
         }
-
-        mButtonBacklightDelay = Settings.System.getIntForUser(resolver,
-                BUTTON_BACKLIGHT_TIMEOUT, BUTTON_ON_DURATION, UserHandle.USER_CURRENT);
 
         mDirty |= DIRTY_SETTINGS;
     }
@@ -1377,12 +1368,12 @@ public final class PowerManagerService extends IPowerManager.Stub
                                 ? mButtonBrightnessOverrideFromWindowManager
                                 : mDisplayPowerRequest.screenBrightness;
                         mKeyboardLight.setBrightness(mKeyboardVisible ? brightness : 0);
-                        if (now > mLastUserActivityTime + mButtonBacklightDelay) {
+                        if (now > mLastUserActivityTime + BUTTON_ON_DURATION) {
                             mButtonsLight.setBrightness(0);
                         } else {
                             mButtonsLight.setBrightness(brightness);
                             if (brightness != 0) {
-                                nextTimeout = now + mButtonBacklightDelay;
+                                nextTimeout = now + BUTTON_ON_DURATION;
                             }
                         }
                         mUserActivitySummary |= USER_ACTIVITY_SCREEN_BRIGHT;
