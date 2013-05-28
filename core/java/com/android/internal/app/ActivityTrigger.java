@@ -47,11 +47,6 @@ public class ActivityTrigger
     }
 
     /** &hide */
-    public int activityBrowserTrigger(String url) {
-        return (native_at_browserActivity(url));
-    }
-
-    /** &hide */
     public void activityStartTrigger(Intent intent) {
         ComponentName cn = intent.getComponent();
         String activity = null;
@@ -74,5 +69,4 @@ public class ActivityTrigger
     private native void native_at_startActivity(String activity);
     private native void native_at_resumeActivity(String activity);
     private native void native_at_deinit();
-    private native int native_at_browserActivity(String url);
 }
