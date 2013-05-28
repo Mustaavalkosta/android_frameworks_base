@@ -33,7 +33,6 @@ import android.graphics.Region;
 import android.os.Build;
 import android.os.Parcelable;
 import android.os.SystemClock;
-import android.os.SystemProperties;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -420,15 +419,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
     @ViewDebug.ExportedProperty(category = "layout")
     private int mChildCountWithTransientState = 0;
 
-    private static final ActivityTrigger mActivityTrigger;
-
-    static {
-        if (SystemProperties.QCOM_HARDWARE) {
-            mActivityTrigger = new ActivityTrigger();
-        } else {
-            mActivityTrigger = null;
-        }
-    }
+    static final ActivityTrigger mActivityTrigger = new ActivityTrigger();
 
     public ViewGroup(Context context) {
         super(context);
@@ -530,21 +521,19 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
     * @hide
     */
     public boolean isChromeBrowserRunningJavaScripts() {
-        if (mActivityTrigger != null) {
-            int count = mChildrenCount;
-            for (int i = 0; i < count; i++) {
-                View child = mChildren[i];
-                if (child instanceof TextView) {
-                   TextView t = (TextView)child;
-                   if (mActivityTrigger.activityBrowserTrigger(t.getText().toString()) == 1) {
-                       return true;
-                   }
-                }
-                if (child instanceof ViewGroup) {
-                    ViewGroup c = (ViewGroup)child;
-                    if (c.isChromeBrowserRunningJavaScripts() == true) {
-                       return true;
-                    }
+        int count = mChildrenCount;
+        for (int i = 0; i < count; i++) {
+            View child = mChildren[i];
+            if (child instanceof TextView) {
+               TextView t = (TextView)child;
+               if (mActivityTrigger.activityBrowserTrigger(t.getText().toString()) == 1) {
+                   return true;
+               }
+            }
+            if (child instanceof ViewGroup) {
+                ViewGroup c = (ViewGroup)child;
+                if (c.isChromeBrowserRunningJavaScripts() == true) {
+                   return true;
                 }
             }
         }
