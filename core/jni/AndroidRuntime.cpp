@@ -176,7 +176,6 @@ extern int register_com_android_internal_content_NativeLibraryHelper(JNIEnv *env
 extern int register_android_content_res_PackageRedirectionMap(JNIEnv* env);
 #ifdef QCOM_HARDWARE
 extern int register_com_android_internal_app_ActivityTrigger(JNIEnv *env);
-extern int register_org_codeaurora_Performance(JNIEnv *env);
 #endif
 
 static AndroidRuntime* gCurRuntime = NULL;
@@ -1221,7 +1220,6 @@ static const RegJNIRec gRegJNI[] = {
 
 #ifdef QCOM_HARDWARE
     REG_JNI(register_com_android_internal_app_ActivityTrigger),
-    REG_JNI(register_org_codeaurora_Performance),
 #endif
 
 };
